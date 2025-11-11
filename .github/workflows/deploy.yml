@@ -25,7 +25,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }} # ✅ ĐÚNG: Xóa "ftps://" khỏi đây
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
 
           server-dir: /www.Nhom15.somee.com/ # hoặc /wwwroot/
           local-dir: ./
