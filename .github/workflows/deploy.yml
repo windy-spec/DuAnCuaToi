@@ -28,5 +28,5 @@ jobs:
 
           server-dir: /www.Nhom15.somee.com/ # hoặc /wwwroot/
           local-dir: ./
-          dangerous-clean-slate: false
+          dangerous-clean-slate: true
           log-level: verbose
