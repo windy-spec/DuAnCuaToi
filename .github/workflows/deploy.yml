@@ -4,38 +4,29 @@ on:
   push:
     branches:
       - main
-      - master # Tự động chạy khi bạn push code lên nhánh main hoặc master
+      - master
   workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 🧩 Bước 1: Lấy code từ GitHub về
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      # 🧹 Bước 2: (Tùy chọn) Xóa file thừa trong thư mục làm việc local
-      # Giúp tránh upload các file GitHub Actions hoặc file hệ thống
       - name: Clean unnecessary files
         run: |
           rm -rf .git .github README.md
 
-      # 🚀 Bước 3: Deploy lên Somee bằng FTP
       - name: Deploy to Somee via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ftps://${{ secrets.FTP_SERVER }} # Dùng FTPS cho Somee
-          username: ${{ secrets.FTP_USERNAME }} # Lưu trong GitHub Secrets
+          server: ftps://${{ secrets.FTP_SERVER }} # ftp.somee.com hoặc 155.254.244.37
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
 
-          # 📂 Thư mục trên máy chủ (Somee yêu cầu /wwwroot/)
-          server-dir: /wwwroot/
-
-          # 📁 Thư mục local cần upload (./ nghĩa là toàn bộ project)
+          server-dir: /www.Nhom15.somee.com/ # hoặc /wwwroot/
           local-dir: ./
-
-          # ⚙️ Cấu hình thêm
-          dangerous-clean-slate: false # KHÔNG xóa toàn bộ để tránh lỗi quyền
-          dry-run: false # Đặt true nếu muốn test trước khi upload
-          log-level: verbose # Hiển thị chi tiết log
+          dangerous-clean-slate: false
+          log-level: verbose
