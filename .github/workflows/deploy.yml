@@ -1,33 +1,41 @@
-name: Deploy Static HTML to Somee
+name: 🚀 Deploy Static HTML to Somee
 
-# Kích hoạt khi đẩy code lên nhánh "main" (hoặc "master")
 on:
   push:
-    branches: ["main", "master"] # Đảm bảo tên nhánh của bạn ở đây
+    branches:
+      - main
+      - master # Tự động chạy khi bạn push code lên nhánh main hoặc master
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Chạy trên Ubuntu là đủ cho web tĩnh
+    runs-on: ubuntu-latest
 
     steps:
-      # Bước 1: Lấy code từ repo về
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # 🧩 Bước 1: Lấy code từ GitHub về
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-      # Bước 2: Deploy lên Somee bằng FTP
-      - name: FTP Deploy
+      # 🧹 Bước 2: (Tùy chọn) Xóa file thừa trong thư mục làm việc local
+      # Giúp tránh upload các file GitHub Actions hoặc file hệ thống
+      - name: Clean unnecessary files
+        run: |
+          rm -rf .git .github README.md
+
+      # 🚀 Bước 3: Deploy lên Somee bằng FTP
+      - name: Deploy to Somee via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          # Lấy thông tin từ Secrets bạn vừa tạo
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: ftps://${{ secrets.FTP_SERVER }} # Dùng FTPS cho Somee
+          username: ${{ secrets.FTP_USERNAME }} # Lưu trong GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}
 
-          # Thư mục gốc trên Somee
+          # 📂 Thư mục trên máy chủ (Somee yêu cầu /wwwroot/)
           server-dir: /wwwroot/
 
-          # Thư mục local (để ./ là upload tất cả)
+          # 📁 Thư mục local cần upload (./ nghĩa là toàn bộ project)
           local-dir: ./
 
-          # Tùy chọn: Xóa file cũ trên server
-          dangerous-clean-slate: true
+          # ⚙️ Cấu hình thêm
+          dangerous-clean-slate: false # KHÔNG xóa toàn bộ để tránh lỗi quyền
+          dry-run: false # Đặt true nếu muốn test trước khi upload
+          log-level: verbose # Hiển thị chi tiết log
