@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master # Tự động chạy khi bạn push code lên nhánh main hoặc master
-
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
