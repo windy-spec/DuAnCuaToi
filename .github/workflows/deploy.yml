@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
 
           # Thư mục gốc trên Somee
-          server-dir: /www/nhom15.somee.com/
+          server-dir: www/nhom15.somee.com/
 
           # Thư mục local (để ./ là upload tất cả)
           local-dir: ./
